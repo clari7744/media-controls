@@ -6,24 +6,24 @@ import Gio from "gi://Gio";
 import GLib from "gi://GLib";
 import Meta from "gi://Meta";
 import Shell from "gi://Shell";
+import { Extension } from "resource:///org/gnome/shell/extensions/extension.js";
 import * as Main from "resource:///org/gnome/shell/ui/main.js";
 import * as Mpris from "resource:///org/gnome/shell/ui/mpris.js";
-import { Extension } from "resource:///org/gnome/shell/extensions/extension.js";
 
 import PanelButton from "./helpers/shell/PanelButton.js";
 import PlayerProxy from "./helpers/shell/PlayerProxy.js";
-import { debugLog, enumValueByIndex, errorLog } from "./utils/common.js";
-import { getAppInfoByIdAndEntry, getAppByIdAndEntry, createDbusProxy } from "./utils/shell_only.js";
 import {
+    DBUS_IFACE_NAME,
+    DBUS_OBJECT_PATH,
+    DBUS_PROPERTIES_IFACE_NAME,
+    ExtensionPositions,
+    MPRIS_IFACE_NAME,
+    MPRIS_PLAYER_IFACE_NAME,
     PlaybackStatus,
     WidgetFlags,
-    MPRIS_PLAYER_IFACE_NAME,
-    DBUS_PROPERTIES_IFACE_NAME,
-    MPRIS_IFACE_NAME,
-    DBUS_OBJECT_PATH,
-    DBUS_IFACE_NAME,
-    ExtensionPositions,
 } from "./types/enums/common.js";
+import { debugLog, enumValueByIndex, errorLog } from "./utils/common.js";
+import { createDbusProxy, getAppByIdAndEntry, getAppInfoByIdAndEntry } from "./utils/shell_only.js";
 
 /** @typedef {KeysOf<typeof PanelElements>[]} ElementsOrder */
 /** @typedef {(KeysOf<typeof LabelTypes> | (string & NonNullable<unknown>))[]} LabelsOrder */
@@ -47,7 +47,13 @@ export default class MediaControls extends Extension {
      * @public
      * @type {boolean}
      */
-    scrollLabels;
+    scrollButtonLabel;
+
+    /**
+     * @public
+     * @type {boolean}
+     */
+    scrollPopupLabels;
 
     /**
      * @public
@@ -321,7 +327,9 @@ export default class MediaControls extends Extension {
         this.settings = this.getSettings();
         this.labelWidth = this.settings.get_uint("label-width");
         this.isFixedLabelWidth = this.settings.get_boolean("fixed-label-width");
-        this.scrollLabels = this.settings.get_boolean("scroll-labels");
+        // this.scrollLabels = this.settings.get_boolean("scroll-labels");
+        this.scrollButtonLabel = this.settings.get_boolean("scroll-button-label");
+        this.scrollPopupLabels = this.settings.get_boolean("scroll-popup-labels");
         this.scrollSpeed = this.settings.get_uint("scroll-speed");
         this.scrollPauseTime = this.settings.get_uint("scroll-pause-time") * 1000;
         this.hideMediaNotification = this.settings.get_boolean("hide-media-notification");
@@ -355,9 +363,14 @@ export default class MediaControls extends Extension {
             this.isFixedLabelWidth = this.settings.get_boolean("fixed-label-width");
             this.panelBtn?.updateWidgets(WidgetFlags.PANEL_LABEL | WidgetFlags.MENU_LABELS | WidgetFlags.MENU_IMAGE);
         });
-        this.settings.connect("changed::scroll-labels", () => {
-            this.scrollLabels = this.settings.get_boolean("scroll-labels");
-            this.panelBtn?.updateWidgets(WidgetFlags.PANEL_LABEL | WidgetFlags.MENU_LABELS);
+        this.settings.connect("changed::scroll-button-label", () => {
+            this.scrollPopupLabels = this.settings.get_boolean("scroll-button-label");
+            this.panelBtn?.updateWidgets(WidgetFlags.PANEL_LABEL);
+        });
+
+        this.settings.connect("changed::scroll-popup-labels", () => {
+            this.scrollPopupLabels = this.settings.get_boolean("scroll-popup-labels");
+            this.panelBtn?.updateWidgets(WidgetFlags.MENU_LABELS);
         });
         this.settings.connect("changed::scroll-speed", () => {
             this.scrollSpeed = this.settings.get_uint("scroll-speed");
@@ -759,8 +772,11 @@ export default class MediaControls extends Extension {
         this.settings = null;
         this.labelWidth = null;
         this.hideMediaNotification = null;
-        this.scrollLabels = null;
+        // this.scrollLabels = null;
         this.scrollSpeed = null;
+        this.scrollButtonLabel = null;
+        this.scrollPopupLabels = null;
+        this.showTrackSlider = null;
         this.showLabel = null;
         this.showPlayerIcon = null;
         this.showControlIcons = null;

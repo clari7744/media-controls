@@ -1,17 +1,17 @@
 import Adw from "gi://Adw";
 import GLib from "gi://GLib";
+import GObject from "gi://GObject";
 import Gdk from "gi://Gdk";
 import Gio from "gi://Gio";
 import Gtk from "gi://Gtk";
-import GObject from "gi://GObject";
 import { ExtensionPreferences, gettext as _ } from "resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js";
 
+import AppChooserorig from "./helpers/prefs/AppChooser.js";
 import BlacklistedPlayersOrig from "./helpers/prefs/BlacklistedPlayers.js";
 import ElementListOrig from "./helpers/prefs/ElementList.js";
 import LabelListOrig from "./helpers/prefs/LabelList.js";
-import AppChooserorig from "./helpers/prefs/AppChooser.js";
-import { isValidBinding, isValidAccelerator } from "./utils/prefs_only.js";
 import { errorLog } from "./utils/common.js";
+import { isValidAccelerator, isValidBinding } from "./utils/prefs_only.js";
 
 /** @type {typeof BlacklistedPlayersOrig} */
 export let BlacklistedPlayers;
@@ -261,7 +261,9 @@ export default class MediaControlsPreferences extends ExtensionPreferences {
     bindSettings() {
         this.bindSetting("label-width", "sr-general-label-width", "value");
         this.bindSetting("fixed-label-width", "sr-general-label-fixed", "active");
-        this.bindSetting("scroll-labels", "sr-general-scroll-labels", "active");
+        // this.bindSetting("scroll-labels", "sr-general-scroll-labels", "active");
+        this.bindSetting("scroll-button-label", "sr-general-scroll-button-label", "active");
+        this.bindSetting("scroll-popup-labels", "sr-general-scroll-popup-labels", "active");
         this.bindSetting("scroll-speed", "sr-general-scroll-speed", "value");
         this.bindSetting("scroll-pause-time", "sr-general-scroll-pause-time", "value");
         this.bindSetting("hide-media-notification", "sr-general-hide-media-notification", "active");

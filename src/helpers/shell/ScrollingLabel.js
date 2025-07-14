@@ -1,8 +1,8 @@
 import Clutter from "gi://Clutter";
+import GLib from "gi://GLib";
 import GObject from "gi://GObject";
 import Pango from "gi://Pango";
 import St from "gi://St";
-import GLib from "gi://GLib"
 import { debugLog } from "../../utils/common.js";
 
 /**
@@ -125,6 +125,7 @@ class ScrollingLabel extends St.ScrollView {
     pauseScrolling() {
         this.transition?.pause();
         this.initPaused = true;
+        this.get_hadjustment().set_value(0);
     }
 
     /**
@@ -140,11 +141,21 @@ class ScrollingLabel extends St.ScrollView {
      * @public
      * @returns {void}
      */
+    stopScrolling() {
+        this.transition?.stop();
+        this.initPaused = true;
+        this.get_hadjustment().set_value(0);
+    }
+
+    /**
+     * @public
+     * @returns {void}
+     */
     destroy() {
         // Stop and remove any active transitions before destroying
         if (this.transition) {
             const adjustment = this.get_hadjustment();
-            if (adjustment) {
+            if (adjustment) {   
                 adjustment.remove_transition("scroll");
             }
             this.transition = null;
