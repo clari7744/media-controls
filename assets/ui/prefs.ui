@@ -34,9 +34,15 @@
               </object>
             </child>
             <child>
-              <object class="AdwSwitchRow" id="sr-general-scroll-labels">
-                <property name="title" translatable="yes">Scroll labels</property>
-                <property name="subtitle" translatable="yes">Scroll the labels when they are wider than the width</property>
+              <object class="AdwSwitchRow" id="sr-general-scroll-button-label">
+                <property name="title" translatable="yes">Scroll button label</property>
+                <property name="subtitle" translatable="yes">Scroll the button label when it is wider than the width</property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwSwitchRow" id="sr-general-scroll-popup-labels">
+                <property name="title" translatable="yes">Scroll popup labels</property>
+                <property name="subtitle" translatable="yes">Scroll the labels in the popup menu when they are wider than the width</property>
               </object>
             </child>
           </object>

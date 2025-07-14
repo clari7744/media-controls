@@ -111,6 +111,7 @@ class ScrollingLabel extends St.ScrollView {
     pauseScrolling() {
         this.transition?.pause();
         this.initPaused = true;
+        this.get_hadjustment().set_value(0);
     }
 
     /**
@@ -120,6 +121,16 @@ class ScrollingLabel extends St.ScrollView {
     resumeScrolling() {
         this.transition?.start();
         this.initPaused = false;
+    }
+
+    /**
+     * @public
+     * @returns {void}
+     */
+    stopScrolling() {
+        this.transition?.stop();
+        this.initPaused = true;
+        this.get_hadjustment().set_value(0);
     }
 
     /**

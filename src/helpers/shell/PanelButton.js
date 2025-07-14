@@ -503,7 +503,7 @@ class PanelButton extends PanelMenu.Button {
         const width = this.extension.labelWidth > 0 ? this.getMenuItemWidth() : 0;
         this.menuLabelTitle = new ScrollingLabel({
             text: this.playerProxy.metadata["xesam:title"],
-            isScrolling: this.extension.scrollLabels,
+            isScrolling: this.extension.scrollPopupLabels,
             initPaused: this.playerProxy.playbackStatus !== PlaybackStatus.PLAYING,
             width,
         });
@@ -511,9 +511,8 @@ class PanelButton extends PanelMenu.Button {
         const albumText = this.playerProxy.metadata["xesam:album"] || "";
         this.menuLabelSubtitle = new ScrollingLabel({
             text: albumText === "" ? artistText : `${artistText} / ${albumText}`,
-            isScrolling: this.extension.scrollLabels,
+            isScrolling: this.extension.scrollPopupLabels,
             initPaused: this.playerProxy.playbackStatus !== PlaybackStatus.PLAYING,
-            direction: Clutter.TimelineDirection.BACKWARD,
             width,
         });
         this.menuLabelTitle.label.add_style_class_name("popup-menu-label-title");
@@ -680,7 +679,7 @@ class PanelButton extends PanelMenu.Button {
             text: this.getButtonLabelText(),
             width: this.extension.labelWidth,
             isFixedWidth: this.extension.isFixedLabelWidth,
-            isScrolling: this.extension.scrollLabels,
+            isScrolling: this.extension.scrollButtonLabel,
             initPaused: this.playerProxy.playbackStatus !== PlaybackStatus.PLAYING,
         });
         if (this.buttonLabel?.get_parent() === this.buttonBox) {
@@ -862,8 +861,8 @@ class PanelButton extends PanelMenu.Button {
             this.updateWidgets(WidgetFlags.PANEL_CONTROLS_PLAYPAUSE | WidgetFlags.MENU_CONTROLS_PLAYPAUSE);
             if (this.playerProxy.playbackStatus !== PlaybackStatus.PLAYING) {
                 this.buttonLabel?.pauseScrolling();
-                this.menuLabelTitle.pauseScrolling();
-                this.menuLabelSubtitle.pauseScrolling();
+                // this.menuLabelTitle.pauseScrolling();
+                // this.menuLabelSubtitle.pauseScrolling();
                 this.menuSlider?.pauseTransition();
             } else {
                 this.buttonLabel?.resumeScrolling();

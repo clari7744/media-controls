@@ -28,7 +28,10 @@
     <key name="fixed-label-width" type="b">
       <default>false</default>
     </key>
-    <key name="scroll-labels" type="b">
+    <key name="scroll-button-label" type="b">
+      <default>true</default>
+    </key>
+    <key name="scroll-popup-labels" type="b">
       <default>true</default>
     </key>
     <key name="hide-media-notification" type="b">
