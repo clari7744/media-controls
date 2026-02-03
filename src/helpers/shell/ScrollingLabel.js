@@ -194,7 +194,7 @@ class ScrollingLabel extends St.ScrollView {
      */
     initScrolling() {
         const adjustment = this.get_hadjustment();
-        const origText = this.label.text + "     ";
+        const origText = this.label.text + " ".repeat(15);
 
         // Clean up any existing handler first
         if (this.onAdjustmentChangedId != null) {
@@ -301,6 +301,7 @@ class ScrollingLabel extends St.ScrollView {
         });
 
         if (this.scrollPauseTime > 0) {
+            // Wait `scrollPauseTime`, then resume scrolling
             this.pauseTimerId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, this.scrollPauseTime, () => {
                 this.pauseTimerId = null;
                 adjustment.add_transition("scroll", this.transition);
