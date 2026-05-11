@@ -47,14 +47,17 @@ This project uses pnpm for package management and script execution. Make sure yo
 ### Available Scripts
 
 **Building:**
+
 - `pnpm build` - Build the extension
 - `pnpm release` - Build release version (strips debug code)
 
 **Development:**
+
 - `pnpm debug` - Run a nested gnome session for debugging
 - `pnpm translations` - Update translation files
 
 **Extension Management:**
+
 - `pnpm run ext:install` - Install the extension
 - `pnpm run ext:uninstall` - Uninstall the extension
 - `pnpm run ext:enable` - Enable the extension

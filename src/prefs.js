@@ -1,17 +1,17 @@
 import Adw from "gi://Adw";
 import GLib from "gi://GLib";
+import GObject from "gi://GObject";
 import Gdk from "gi://Gdk";
 import Gio from "gi://Gio";
 import Gtk from "gi://Gtk";
-import GObject from "gi://GObject";
 import { ExtensionPreferences, gettext as _ } from "resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js";
 
+import AppChooserorig from "./helpers/prefs/AppChooser.js";
 import BlacklistedPlayersOrig from "./helpers/prefs/BlacklistedPlayers.js";
 import ElementListOrig from "./helpers/prefs/ElementList.js";
 import LabelListOrig from "./helpers/prefs/LabelList.js";
-import AppChooserorig from "./helpers/prefs/AppChooser.js";
-import { isValidBinding, isValidAccelerator } from "./utils/prefs_only.js";
 import { errorLog } from "./utils/common.js";
+import { isValidAccelerator, isValidBinding } from "./utils/prefs_only.js";
 
 /** @type {typeof BlacklistedPlayersOrig} */
 export let BlacklistedPlayers;

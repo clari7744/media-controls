@@ -6,24 +6,24 @@ import Gio from "gi://Gio";
 import GLib from "gi://GLib";
 import Meta from "gi://Meta";
 import Shell from "gi://Shell";
+import { Extension } from "resource:///org/gnome/shell/extensions/extension.js";
 import * as Main from "resource:///org/gnome/shell/ui/main.js";
 import * as Mpris from "resource:///org/gnome/shell/ui/mpris.js";
-import { Extension } from "resource:///org/gnome/shell/extensions/extension.js";
 
 import PanelButton from "./helpers/shell/PanelButton.js";
 import PlayerProxy from "./helpers/shell/PlayerProxy.js";
-import { debugLog, enumValueByIndex, errorLog } from "./utils/common.js";
-import { getAppInfoByIdAndEntry, getAppByIdAndEntry, createDbusProxy } from "./utils/shell_only.js";
 import {
+    DBUS_IFACE_NAME,
+    DBUS_OBJECT_PATH,
+    DBUS_PROPERTIES_IFACE_NAME,
+    ExtensionPositions,
+    MPRIS_IFACE_NAME,
+    MPRIS_PLAYER_IFACE_NAME,
     PlaybackStatus,
     WidgetFlags,
-    MPRIS_PLAYER_IFACE_NAME,
-    DBUS_PROPERTIES_IFACE_NAME,
-    MPRIS_IFACE_NAME,
-    DBUS_OBJECT_PATH,
-    DBUS_IFACE_NAME,
-    ExtensionPositions,
 } from "./types/enums/common.js";
+import { debugLog, enumValueByIndex, errorLog } from "./utils/common.js";
+import { createDbusProxy, getAppByIdAndEntry, getAppInfoByIdAndEntry } from "./utils/shell_only.js";
 
 /** @typedef {KeysOf<typeof PanelElements>[]} ElementsOrder */
 /** @typedef {(KeysOf<typeof LabelTypes> | (string & NonNullable<unknown>))[]} LabelsOrder */

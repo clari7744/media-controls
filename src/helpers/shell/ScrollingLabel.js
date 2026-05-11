@@ -1,8 +1,8 @@
 import Clutter from "gi://Clutter";
+import GLib from "gi://GLib";
 import GObject from "gi://GObject";
 import Pango from "gi://Pango";
 import St from "gi://St";
-import GLib from "gi://GLib"
 import { debugLog } from "../../utils/common.js";
 
 /**
@@ -181,7 +181,7 @@ class ScrollingLabel extends St.ScrollView {
             this.label.disconnect(this.onMappedId);
             this.onMappedId = null;
         }
-        
+
         if (this.initialPauseTimerId != null) {
             GLib.source_remove(this.initialPauseTimerId);
             this.initialPauseTimerId = null;

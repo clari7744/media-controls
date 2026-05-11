@@ -5,31 +5,29 @@
 /** @import { PlayerProxyProperties } from '../../types/dbus.js' */
 /** @import { PanelControlIconOptions, MenuControlIconOptions } from '../../types/enums/shell_only.js' */
 
-import GObject from "gi://GObject";
 import Clutter from "gi://Clutter";
 import GdkPixbuf from "gi://GdkPixbuf";
-import GLib from "gi://GLib";
-import Cogl from "gi://Cogl";
 import Gio from "gi://Gio";
+import GLib from "gi://GLib";
+import GObject from "gi://GObject";
 import St from "gi://St";
+import { gettext as _ } from "resource:///org/gnome/shell/extensions/extension.js";
 import * as PanelMenu from "resource:///org/gnome/shell/ui/panelMenu.js";
 import * as PopupMenu from "resource:///org/gnome/shell/ui/popupMenu.js";
-import { gettext as _ } from "resource:///org/gnome/shell/extensions/extension.js";
-import * as Config from 'resource:///org/gnome/shell/misc/config.js';
 
-import ScrollingLabel from "./ScrollingLabel.js";
-import MenuSlider from "./MenuSlider.js";
-import { debugLog, errorLog } from "../../utils/common.js";
-import { getAppByIdAndEntry, getImage } from "../../utils/shell_only.js";
-import { ControlIconOptions } from "../../types/enums/shell_only.js";
 import {
     LabelTypes,
-    PanelElements,
-    MouseActions,
     LoopStatus,
+    MouseActions,
+    PanelElements,
     PlaybackStatus,
     WidgetFlags,
 } from "../../types/enums/common.js";
+import { ControlIconOptions } from "../../types/enums/shell_only.js";
+import { debugLog, errorLog } from "../../utils/common.js";
+import { getAppByIdAndEntry, getImage } from "../../utils/shell_only.js";
+import MenuSlider from "./MenuSlider.js";
+import ScrollingLabel from "./ScrollingLabel.js";
 
 Gio._promisify(GdkPixbuf.Pixbuf, "new_from_stream_async", "new_from_stream_finish");
 Gio._promisify(Gio.File.prototype, "query_info_async", "query_info_finish");
