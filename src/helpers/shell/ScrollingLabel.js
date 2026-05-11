@@ -126,6 +126,8 @@ class ScrollingLabel extends St.ScrollView {
     pauseScrolling() {
         this.transition?.pause();
         this.initPaused = true;
+        // Snap to start so that pausing in the middle will show the beginning of the text instead
+        this.get_hadjustment().set_value(0);
     }
 
     /**
@@ -135,6 +137,16 @@ class ScrollingLabel extends St.ScrollView {
     resumeScrolling() {
         this.transition?.start();
         this.initPaused = false;
+    }
+
+    /**
+     * @public
+     * @returns {void}
+     */
+    stopScrolling() {
+        this.transition?.stop();
+        this.initPaused = true;
+        this.get_hadjustment().set_value(0);
     }
 
     /**
@@ -179,7 +191,7 @@ class ScrollingLabel extends St.ScrollView {
             GLib.source_remove(this.cyclePauseTimerId);
             this.cyclePauseTimerId = null;
         }
-        
+
         super.destroy();
     }
 
@@ -189,7 +201,7 @@ class ScrollingLabel extends St.ScrollView {
      */
     initScrolling() {
         const adjustment = this.get_hadjustment();
-        const origText = this.label.text + "     ";
+        const origText = this.label.text + " ".repeat(15);
 
         // Clean up any existing handler first
         if (this.onAdjustmentChangedId != null) {
@@ -283,7 +295,7 @@ class ScrollingLabel extends St.ScrollView {
 
         this.transition.connect("completed", () => {
             this.transition.rewind(); // Snap back to 0
-            
+
             if (this.scrollPauseTime > 0) {
                 if (this.cyclePauseTimerId != null) {
                     GLib.source_remove(this.cyclePauseTimerId);
@@ -303,6 +315,7 @@ class ScrollingLabel extends St.ScrollView {
         });
 
         if (this.scrollPauseTime > 0) {
+            // Wait `scrollPauseTime`, then resume scrolling
             this.initialPauseTimerId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, this.scrollPauseTime, () => {
                 this.initialPauseTimerId = null;
                 adjustment.add_transition("scroll", this.transition);

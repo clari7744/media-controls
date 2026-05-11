@@ -47,7 +47,13 @@ export default class MediaControls extends Extension {
      * @public
      * @type {boolean}
      */
-    scrollLabels;
+    scrollButtonLabel;
+
+    /**
+     * @public
+     * @type {boolean}
+     */
+    scrollPopupLabels;
 
     /**
      * @public
@@ -321,7 +327,8 @@ export default class MediaControls extends Extension {
         this.settings = this.getSettings();
         this.labelWidth = this.settings.get_uint("label-width");
         this.isFixedLabelWidth = this.settings.get_boolean("fixed-label-width");
-        this.scrollLabels = this.settings.get_boolean("scroll-labels");
+        this.scrollButtonLabel = this.settings.get_boolean("scroll-button-label");
+        this.scrollPopupLabels = this.settings.get_boolean("scroll-popup-labels");
         this.scrollSpeed = this.settings.get_uint("scroll-speed");
         this.scrollPauseTime = this.settings.get_uint("scroll-pause-time") * 1000;
         this.hideMediaNotification = this.settings.get_boolean("hide-media-notification");
@@ -355,9 +362,14 @@ export default class MediaControls extends Extension {
             this.isFixedLabelWidth = this.settings.get_boolean("fixed-label-width");
             this.panelBtn?.updateWidgets(WidgetFlags.PANEL_LABEL | WidgetFlags.MENU_LABELS | WidgetFlags.MENU_IMAGE);
         });
-        this.settings.connect("changed::scroll-labels", () => {
-            this.scrollLabels = this.settings.get_boolean("scroll-labels");
-            this.panelBtn?.updateWidgets(WidgetFlags.PANEL_LABEL | WidgetFlags.MENU_LABELS);
+        this.settings.connect("changed::scroll-button-label", () => {
+            this.scrollPopupLabels = this.settings.get_boolean("scroll-button-label");
+            this.panelBtn?.updateWidgets(WidgetFlags.PANEL_LABEL);
+        });
+
+        this.settings.connect("changed::scroll-popup-labels", () => {
+            this.scrollPopupLabels = this.settings.get_boolean("scroll-popup-labels");
+            this.panelBtn?.updateWidgets(WidgetFlags.MENU_LABELS);
         });
         this.settings.connect("changed::scroll-speed", () => {
             this.scrollSpeed = this.settings.get_uint("scroll-speed");
@@ -759,8 +771,10 @@ export default class MediaControls extends Extension {
         this.settings = null;
         this.labelWidth = null;
         this.hideMediaNotification = null;
-        this.scrollLabels = null;
         this.scrollSpeed = null;
+        this.scrollButtonLabel = null;
+        this.scrollPopupLabels = null;
+        this.showTrackSlider = null;
         this.showLabel = null;
         this.showPlayerIcon = null;
         this.showControlIcons = null;
