@@ -58,6 +58,12 @@ export default class PlayerProxy {
      * @type {boolean}
      */
     isInvalid;
+    /**
+     * @public
+     * @type {string}
+     *
+     */
+    title;
 
     /**
      * @param {string} busName
@@ -193,8 +199,11 @@ export default class PlayerProxy {
      * @returns {void}
      */
     validatePlayer() {
+        this.title =
+            this.metadata["xesam:title"] ||
+            decodeURIComponent(this.metadata["xesam:url"]?.split("/").pop() || _("Unknown title"));
         const isValidName = this.mprisProxy.Identity || this.mprisProxy.DesktopEntry;
-        const isValidMetadata = this.metadata && this.metadata["xesam:title"];
+        const isValidMetadata = this.metadata;
         this.isInvalid = !isValidName || !isValidMetadata;
         this.callOnChangedListeners("IsInvalid", this.isInvalid);
     }

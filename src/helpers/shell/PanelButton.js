@@ -218,6 +218,7 @@ class PanelButton extends PanelMenu.Button {
      * @returns {void}
      */
     updateWidgets(flags) {
+        if (this.playerProxy == null) return;
         if (this.buttonBox == null) {
             this.buttonBox = new St.BoxLayout({
                 styleClass: "panel-button-box",
@@ -560,7 +561,7 @@ class PanelButton extends PanelMenu.Button {
         }
         const width = this.getMenuItemWidth();
         this.menuLabelTitle = new ScrollingLabel({
-            text: this.playerProxy.metadata["xesam:title"],
+            text: this.playerProxy.title,
             isScrolling: this.extension.scrollPopupLabels,
             initPaused: this.playerProxy.playbackStatus !== PlaybackStatus.PLAYING,
             width,
@@ -600,7 +601,7 @@ class PanelButton extends PanelMenu.Button {
                 this.playerProxy.setPosition(this.playerProxy.metadata["mpris:trackid"], position);
             });
         }
-        if (position != null && length != null && length > 0) {
+        if (position != null && position >= 0 && length != null && length > 0) {
             this.menuSlider.setDisabled(false);
             this.menuSlider.updateSlider(position, length, rate);
             if (this.playerProxy.playbackStatus === PlaybackStatus.PLAYING) {
@@ -937,7 +938,7 @@ class PanelButton extends PanelMenu.Button {
         const labelTextElements = [];
         for (const labelElement of this.extension.labelsOrder) {
             if (LabelTypes[labelElement] === LabelTypes.TITLE) {
-                labelTextElements.push(this.playerProxy.metadata["xesam:title"]);
+                labelTextElements.push(this.playerProxy.title);
             } else if (LabelTypes[labelElement] === LabelTypes.ARTIST) {
                 labelTextElements.push(this.playerProxy.metadata["xesam:artist"]?.join(", ") || _("Unknown artist"));
             } else if (LabelTypes[labelElement] === LabelTypes.ALBUM) {
@@ -975,7 +976,9 @@ class PanelButton extends PanelMenu.Button {
             );
         });
         this.addProxyListener("PlaybackStatus", () => {
-            this.updateWidgets(WidgetFlags.PANEL_CONTROLS_PLAYPAUSE | WidgetFlags.MENU_CONTROLS_PLAYPAUSE);
+            this.updateWidgets(
+                WidgetFlags.PANEL_CONTROLS_PLAYPAUSE | WidgetFlags.MENU_CONTROLS_PLAYPAUSE | WidgetFlags.MENU_SLIDER,
+            );
             if (this.playerProxy.playbackStatus !== PlaybackStatus.PLAYING) {
                 this.buttonLabel?.pauseScrolling();
                 // this.menuLabelTitle.pauseScrolling();
